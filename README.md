@@ -3,8 +3,6 @@
 
 ![hosejs](https://github.com/deptno/hosejs/raw/master/asset/hosejs.gif)
 
-> Required node > v10
-
 Transform JSON data with just **JavaScript** in terminal
 
 `jq`? javascript is clearly better option for people already use javascript.
@@ -27,7 +25,7 @@ npm -g install hosejs
 
 ## usage
 
-```
+```bash
 $ cat some.json | j '_.map(x => x.timestamp)'
 $ cat some.json | j '_.map(x => x.timestamp)' --tab 4
 $ cat some.json | j '_.map(x => x.timestamp)' --file pre.js --tab 2

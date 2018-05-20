@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-import {chomp, chunksToLinesAsync} from '@rauschma/stringio'
 import {createContext, runInContext} from 'vm'
 import * as meow from 'meow'
 import * as fs from 'fs'
 import {promisify} from 'util'
+import * as stdin from 'get-stdin'
 
 const program = meow(`
   HoseJS
@@ -29,24 +29,16 @@ const program = meow(`
 async function main() {
   const {input, flags} = program
   const readFile = promisify(fs.readFile)
-  const stream = process.stdin as any
-  const lines = []
-
   if (flags.file) {
     input.unshift((await readFile(flags.file)).toString())
   }
 
-  for await (const line of chunksToLinesAsync(stream)) {
-    lines.push(chomp(line))
-  }
-
   try {
-    const _ = JSON.parse(lines.join(''))
+    const _ = JSON.parse(await stdin())
     const sandbox = {_}
 
     createContext(sandbox)
     runInContext(input.map(c => `_ = ${c}`).join(';'), sandbox)
-
     print(sandbox._, parseInt(flags.tab))
   } catch (e) {
     console.error('🚫', e)
