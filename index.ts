@@ -10,15 +10,15 @@ const program = meow(`
   HoseJS
   Transform JSON with javascript.
   
-	Usage
-	  $ cat some.json | j '[_].map(x => x.some_property)[0]'
-	  $ cat some.json | j '_.map(x => new Date(x.timestamp).toISOString())'
-	  $ cat some.json | j --file preload.js '.map(x => x.timestamp)'
+  Usage
+    $ cat some.json | j '[_].map(x => x.some_property)[0]'
+    $ cat some.json | j '_.map(x => new Date(x.timestamp).toISOString())'
+    $ cat some.json | j --file preload.js '.map(x => x.timestamp)'
   Alias
-	  js
-	Options
-	  --file, -f      use javascript file first
-	  --tab, -t       JSON tab space (default: 2)
+    j, js
+  Options
+    --file, -f      use javascript file first
+    --tab, -t       JSON tab space (default: 2)
 `, {
   flags: {
     file: {type: 'string', alias: 'f'},

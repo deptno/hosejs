@@ -18,12 +18,14 @@ Transform JSON data with just **JavaScript** in terminal
 npm -g install hosejs
 ```
 
-## command
+## Command
 
 `j` or `js`
 
 
-## usage
+## Usage
+
+`_` is everything you need to know
 
 ```bash
 $ cat some.json | j '_.map(x => x.timestamp)'
@@ -35,7 +37,7 @@ $ cat some.json | j '_.map(x => new Date(x.timestamp).toISOString())'
 $ cat some.json | j --file preload.js '_.map(x => x.timestamp)'
 $ http https://swapi.co/api/people/ | j 'Object.keys(_)'
 $ http https://swapi.co/api/people/ | j '_.count'
-http https://swapi.co/api/people/ | j '_.results.map(x => x.name)'
+$ http https://swapi.co/api/people/ | j '_.results.map(x => x.name)'
 ```
 
 ## License
