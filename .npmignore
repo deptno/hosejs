@@ -2,3 +2,6 @@
 *.json
 *.lock
 .gitignore
+__tests__
+asset
+*.md
