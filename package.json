@@ -24,6 +24,7 @@
     "meow": "^5.0.0"
   },
   "devDependencies": {
+    "@types/get-stdin": "^5.0.1",
     "@types/jest": "^22.2.3",
     "@types/meow": "^4.0.1",
     "@types/node": "^10.1.0",

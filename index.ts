@@ -36,8 +36,14 @@ async function main() {
   }
 
   try {
-    const _ = JSON.parse(await stdin())
-    const sandbox = {_}
+    const source = await stdin()
+    const sandbox: any = {_: undefined}
+
+    try {
+      sandbox._ = JSON.parse(source)
+    } catch (e) {
+      sandbox._ = source
+    }
 
     vm(sandbox, input.map(c => `_ = ${c}`).join(';'))
 
