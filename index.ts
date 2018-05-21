@@ -3,7 +3,6 @@
 import {createContext, runInContext} from 'vm'
 import * as meow from 'meow'
 import * as fs from 'fs'
-import {promisify} from 'util'
 import * as stdin from 'get-stdin'
 
 const program = meow(`
@@ -30,7 +29,6 @@ const program = meow(`
 
 async function main() {
   const {input, flags} = program
-  const readFile = promisify(fs.readFile)
 
   if (flags.file) {
     input.unshift((await readFile(flags.file)).toString())
@@ -47,6 +45,14 @@ async function main() {
     console.error('🚫', e)
     process.exit(1)
   }
+}
+
+function readFile(path: string, options?) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, options, (err, data) => {
+      err ? reject(err) : resolve(data)
+    })
+  })
 }
 
 function print(output, tab: number) {

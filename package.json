@@ -7,6 +7,9 @@
     "j": "index.js",
     "js": "index.js"
   },
+  "engines": {
+    "node": ">=6"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deptno/hosejs.git"
