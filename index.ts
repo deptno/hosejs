@@ -14,6 +14,8 @@ const program = meow(`
     $ cat some.json | j '[_].map(x => x.some_property)[0]'
     $ cat some.json | j '_.map(x => new Date(x.timestamp).toISOString())'
     $ cat some.json | j --file preload.js '.map(x => x.timestamp)'
+  Advanced Usage
+    visit https://github.com/deptno/hosejs#usage
   Alias
     j, js
   Options
@@ -29,6 +31,7 @@ const program = meow(`
 async function main() {
   const {input, flags} = program
   const readFile = promisify(fs.readFile)
+
   if (flags.file) {
     input.unshift((await readFile(flags.file)).toString())
   }

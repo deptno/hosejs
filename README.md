@@ -40,6 +40,30 @@ $ http https://swapi.co/api/people/ | j '_.count'
 $ http https://swapi.co/api/people/ | j '_.results.map(x => x.name)'
 ```
 
+### Inject script file
+
+#### IIFE
+
+```js
+// cw-oneline.js
+(() => {
+  const time = time => new Date(time).toISOString().slice(0, -5).replace('T', ' ')
+  return _.map(x => `${time(x.timestamp)} ${x.message}`)
+})()
+```
+
+```bash
+cat downloaded-cw-log.json | j -f cw-oneline.js > deptno.latest.json
+```
+
+> Hmm ... Is it easy to look upside down?
+
+add `_.reverse()`
+
+```bash
+cat downloaded-cw-log.json | j -f cw-oneline.js '_.reverse()' > deptno.latest.json
+```
+
 ## License
 
 MIT
