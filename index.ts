@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import {createContext, runInContext} from 'vm'
 import * as meow from 'meow'
-import * as fs from 'fs'
 import * as stdin from 'get-stdin'
+import {vm} from './vm'
+import {readFile, print} from './io'
 
 const program = meow(`
   HoseJS
@@ -31,35 +31,21 @@ async function main() {
   const {input, flags} = program
 
   if (flags.file) {
-    input.unshift((await readFile(flags.file)).toString())
+    const buffer = await readFile(flags.file)
+    input.unshift(buffer.toString())
   }
 
   try {
     const _ = JSON.parse(await stdin())
     const sandbox = {_}
 
-    createContext(sandbox)
-    runInContext(input.map(c => `_ = ${c}`).join(';'), sandbox)
+    vm(sandbox, input.map(c => `_ = ${c}`).join(';'))
+
     print(sandbox._, parseInt(flags.tab))
   } catch (e) {
     console.error('🚫', e)
     process.exit(1)
   }
-}
-
-function readFile(path: string, options?) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, options, (err, data) => {
-      err ? reject(err) : resolve(data)
-    })
-  })
-}
-
-function print(output, tab: number) {
-  if (typeof output === 'object') {
-    return console.log(JSON.stringify(output, null, tab))
-  }
-  console.log(output)
 }
 
 main()
