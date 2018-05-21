@@ -8,7 +8,9 @@
     "js": "index.js"
   },
   "scripts": {
-    "test": "jest --coverage"
+    "ts:check": "tsc --noEmit",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "engines": {
     "node": ">=6"

@@ -3,9 +3,12 @@
 
 ![hosejs](https://github.com/deptno/hosejs/raw/master/asset/hosejs.gif)
 
-Transform JSON data with just **JavaScript** in terminal
+> Currently, HoseJS reaches 100% code coverage.
+
+You can transform JSON(or NOT!!) data with just **JavaScript** in terminal.
 
 `jq`? javascript is clearly better option for people already use javascript.
+
 
 ## Options
 
@@ -38,6 +41,7 @@ $ cat some.json | j --file preload.js '_.map(x => x.timestamp)'
 $ http https://swapi.co/api/people/ | j 'Object.keys(_)'
 $ http https://swapi.co/api/people/ | j '_.count'
 $ http https://swapi.co/api/people/ | j '_.results.map(x => x.name)'
+$ echo 'not json string \n !!' | j '_.split("\n")'
 ```
 
 ### Inject script file
