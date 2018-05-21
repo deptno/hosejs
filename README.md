@@ -1,4 +1,5 @@
-# HoseJS
+# HoseJS [![CircleCI](https://circleci.com/gh/deptno/hosejs.svg?style=svg)](https://circleci.com/gh/deptno/hosejs)
+
 [![npm](https://img.shields.io/npm/dt/hosejs.svg?style=for-the-badge)](https://www.npmjs.com/package/hosejs)
 
 ![hosejs](https://github.com/deptno/hosejs/raw/master/asset/hosejs.gif)
