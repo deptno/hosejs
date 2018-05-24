@@ -2,8 +2,9 @@
 
 import * as meow from 'meow'
 import * as stdin from 'get-stdin'
-import {vm} from './vm'
+import {invoker, ramdaInvoker, vm} from './vm'
 import {readFile, print} from './io'
+import * as R from 'ramda'
 
 const program = meow(`
   HoseJS
@@ -20,10 +21,12 @@ const program = meow(`
   Options
     --file, -f      use javascript file first
     --tab, -t       JSON tab space (default: 2)
+    --ramda, -r     write unary function then function is invoked with data automatically
 `, {
   flags: {
-    file: {type: 'string', alias: 'f'},
-    tab : {type: 'string', alias: 't', default: '2'},
+    file : {type: 'string', alias: 'f'},
+    tab  : {type: 'string', alias: 't', default: '2'},
+    ramda: {type: 'boolean', alias: 'r'},
   }
 })
 
@@ -37,15 +40,19 @@ async function main() {
 
   try {
     const source = await stdin()
-    const sandbox: any = {_: undefined}
+    const sandbox: any = {...R, R, _: undefined}
+    const coder = R.ifElse(
+      Boolean,
+      R.always(ramdaInvoker),
+      R.always(invoker),
+    )(flags.ramda)
 
-    try {
-      sandbox._ = JSON.parse(source)
-    } catch (e) {
-      sandbox._ = source
-    }
+    R.compose(
+      R.assoc('_', (R as any).__, sandbox),
+      R.tryCatch(JSON.parse, R.identity)
+    )(source)
 
-    vm(sandbox, input.map(c => `_ = ${c}`).join(';'))
+    vm(sandbox, input.map(coder).join(';'))
 
     print(sandbox._, parseInt(flags.tab))
   } catch (e) {

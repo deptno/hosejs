@@ -1,6 +1,6 @@
 import {readFile, print} from '../io'
 import * as path from 'path'
-import {vm} from '../vm'
+import {invoker, ramdaInvoker, vm} from '../vm'
 
 describe('hosejs', () => {
   describe('vm', () => {
@@ -22,6 +22,20 @@ describe('hosejs', () => {
       expect(sandbox._).toHaveLength(20)
       vm(sandbox, [concat, concat].join(';'))
       expect(sandbox._).toHaveLength(80)
+    })
+  })
+
+  describe('invoker', () => {
+    it('invoker', () => {
+      const codes = [
+        '_.map(x => x)',
+        '_'
+      ]
+      codes.map(code => expect(invoker(code)).toEqual(`_ = ${code}`))
+    })
+    it('ramdaInvoker', () => {
+      const code = ramdaInvoker(`compose(console.log, prop)`)
+      expect(code).toEqual('_ = compose(console.log, prop)(_)')
     })
   })
 
