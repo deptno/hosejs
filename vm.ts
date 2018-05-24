@@ -12,3 +12,4 @@ export const ramdaInvoker = R.compose(
   R.intersperse(__, ['_ = ', '(_)']) as any
 )
 export const invoker = R.concat(`_ = `)
+

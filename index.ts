@@ -14,6 +14,8 @@ const program = meow(`
     $ cat some.json | j '[_].map(x => x.some_property)[0]'
     $ cat some.json | j '_.map(x => new Date(x.timestamp).toISOString())'
     $ cat some.json | j --file preload.js '.map(x => x.timestamp)'
+  Usage #ramda functions
+    $ cat some.json | j -r "pipe(pluck('timestamp'), head, Date)"
   Advanced Usage
     visit https://github.com/deptno/hosejs#usage
   Alias
@@ -21,12 +23,12 @@ const program = meow(`
   Options
     --file, -f      use javascript file first
     --tab, -t       JSON tab space (default: 2)
-    --ramda, -r     write unary function then function is invoked with data automatically
+    --ramda, -r     automatic invoke with 'your_code(_)'
 `, {
   flags: {
-    file : {type: 'string', alias: 'f'},
-    tab  : {type: 'string', alias: 't', default: '2'},
-    ramda: {type: 'boolean', alias: 'r'},
+    file: {type: 'string', alias: 'f'},
+    tab : {type: 'string', alias: 't', default: '2'},
+    ramda : {type: 'boolean', alias: 'r', default: false},
   }
 })
 
@@ -39,21 +41,22 @@ async function main() {
   }
 
   try {
+    const tryCatch = (_: any) => {
+      try {
+        return JSON.parse(_)
+      } catch(e) {
+        return _
+      }
+    }
+    const coder = R.ifElse(Boolean, R.always(ramdaInvoker), R.always(invoker))(flags.ramda)
     const source = await stdin()
-    const sandbox: any = {...R, R, _: undefined}
-    const coder = R.ifElse(
-      Boolean,
-      R.always(ramdaInvoker),
-      R.always(invoker),
-    )(flags.ramda)
 
-    R.compose(
-      R.assoc('_', (R as any).__, sandbox),
-      R.tryCatch(JSON.parse, R.identity)
+    const sandbox: any = R.compose(
+      R.assoc('_', (R as any).__, {...R, R} as any),
+      tryCatch
     )(source)
 
     vm(sandbox, input.map(coder).join(';'))
-
     print(sandbox._, parseInt(flags.tab))
   } catch (e) {
     console.error('🚫', e)

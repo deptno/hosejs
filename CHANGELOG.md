@@ -1,3 +1,8 @@
+## 1.3.0
+
+- inject ramda
+- support fp mode, `-r` option
+
 ## 1.2.0
 
 - requirement: Node 8 => Node 6
