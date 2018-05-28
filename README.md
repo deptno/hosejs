@@ -84,6 +84,11 @@ add `_.reverse()`
 cat downloaded-cw-log.json | j -f cw-oneline.js '_.reverse()' > deptno.latest.json
 ```
 
+## Related
+
+- [cwlog](https://github.com/deptno/cwlog) 🐾 cli AWS Cloudwatch Logs Downloader
+- [post](https://medium.com/@deptno/hosejs-jq-그냥-javascript-합시다-64bda90967d8)
+
 ## License
 
 MIT
